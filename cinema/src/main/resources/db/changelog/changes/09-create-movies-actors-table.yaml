@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-movies-actors-table
+      author: anton dudar
+      changes:
+        - createTable:
+            tableName: movies_actors
+            columns:
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    references: movies(id)
+                    deleteCascade: true
+                    primaryKey: true
+                    foreignKeyName: fk_movies_actors_movie_id
+              - column:
+                  name: actor_id
+                  type: bigint
+                  constraints:
+                    references: actors(id)
+                    deleteCascade: true
+                    primaryKey: true
+                    foreignKeyName: fk_movies_actors_actor_id

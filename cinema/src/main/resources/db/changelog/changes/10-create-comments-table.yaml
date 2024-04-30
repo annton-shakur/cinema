@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-comments-table
+      author: anton dudar
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    reference: movies(id)
+                    foreignKeyName: fk_comments_movie_id
+              - column:
+                  name: content
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
