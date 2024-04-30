@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-movies-categories-table
+      author: anton dudar
+      changes:
+        - createTable:
+            tableName: movies_categories
+            columns:
+              - column:
+                  name: movie_id
+                  type: bigint
+                  constraints:
+                    references: movies(id)
+                    deleteCascade: true
+                    primaryKey: true
+                    foreignKeyName: fk_movies_categories_movie_id
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    references: categories(id)
+                    deleteCascade: true
+                    primaryKey: true
+                    foreignKeyName: fk_movies_categories_category_id
