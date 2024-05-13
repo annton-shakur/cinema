@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 
 public interface ActorService {
 
-    Page<ActorResponseDto> getAll(Pageable pageable);
+    Page<ActorResponseDto> getAll(final Pageable pageable);
 
-    ActorResponseDto findById(Long id);
+    ActorResponseDto findById(final Long id);
 
-    ActorResponseDto saveActor(ActorCreateDto createDto);
+    ActorResponseDto saveActor(final ActorCreateDto createDto);
 
-    ActorResponseDto updateById(Long id, ActorUpdateDto updateDto);
+    ActorResponseDto updateById(final Long id, final ActorUpdateDto updateDto);
 
-    void deleteById(Long id);
+    void deleteById(final Long id);
 
-    Page<ActorResponseDto> searchByName(String name, Pageable pageable);
+    Page<ActorResponseDto> searchByName(final String name, final Pageable pageable);
 }

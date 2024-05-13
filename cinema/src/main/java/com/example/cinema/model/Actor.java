@@ -31,4 +31,8 @@ public class Actor {
     private String description;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
+
+    public Actor(Long id) {
+        this.id = id;
+    }
 }

@@ -5,24 +5,37 @@ import com.example.cinema.dto.director.DirectorCreateDto;
 import com.example.cinema.dto.director.DirectorResponseDto;
 import com.example.cinema.model.Director;
 import com.example.cinema.model.Movie;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface DirectorMapper {
-    // now this mapper may seem very poor, i will fix it once i implement the movie logic
 
-    @Mapping(target = "movieIds", expression = "java(mapMovieIds(director.getMovieList()))")
+    @Mapping(target = "movieIds", ignore = true)
     DirectorResponseDto toDto(Director director);
-
-    default List<Long> mapMovieIds(List<Movie> movieList) {
-        return movieList.stream()
-                .map(Movie::getId)
-                .collect(Collectors.toList());
-    }
 
     @Mapping(target = "movieList", ignore = true)
     Director toModel(DirectorCreateDto createDto);
+
+    @AfterMapping
+    default void setMovies(@MappingTarget DirectorResponseDto responseDto,
+                           Director director
+    ) {
+        responseDto.setMovieIds(director.getMovieList()
+                .stream()
+                .map(Movie::getId)
+                .toList());
+    }
+
+    @AfterMapping
+    default void setMovies(@MappingTarget Director director,
+                           DirectorCreateDto createDto
+    ) {
+        Optional.ofNullable(createDto.getMovieIds()).ifPresent(
+                ids -> director.setMovieList(ids.stream().map(Movie::new).toList())
+        );
+    }
 }

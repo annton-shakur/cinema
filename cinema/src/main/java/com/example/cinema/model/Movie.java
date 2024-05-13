@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,7 +53,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private List<Actor> actors;
+    private Set<Actor> actors;
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany
@@ -62,9 +62,13 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private Set<Category> categories;
     @OneToMany(mappedBy = "movie")
-    private List<Comment> comments;
+    private Set<Comment> comments;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
+
+    public Movie(Long id) {
+        this.id = id;
+    }
 }

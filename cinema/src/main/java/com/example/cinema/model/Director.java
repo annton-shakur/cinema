@@ -33,4 +33,8 @@ public class Director {
     private List<Movie> movieList;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
+
+    public Director(Long id) {
+        this.id = id;
+    }
 }

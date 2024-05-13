@@ -6,11 +6,12 @@ import com.example.cinema.dto.director.DirectorUpdateDto;
 import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.DirectorMapper;
 import com.example.cinema.model.Director;
+import com.example.cinema.model.Movie;
 import com.example.cinema.repository.DirectorRepository;
 import com.example.cinema.service.DirectorService;
-import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,42 +22,51 @@ public class DirectorServiceImpl implements DirectorService {
     private static final String CANNOT_FIND_DIRECTOR_BY_ID_MSG = "Cannot find director by Id: ";
     private final DirectorRepository directorRepository;
     private final DirectorMapper directorMapper;
+    private final Logger logger;
 
     @Override
-    @Transactional // will replace with join once i implement the movie logic
-    public Page<DirectorResponseDto> searchByName(String name, Pageable pageable) {
+    public Page<DirectorResponseDto> searchByName(final String name, final Pageable pageable) {
+        logger.info("[Service]: Searching directors by name: {}", name);
         Page<Director> directorsPage = directorRepository
                 .findByNameStartingWithIgnoreCase(name, pageable);
         return directorsPage.map(directorMapper::toDto);
     }
 
     @Override
-    @Transactional // will replace with join once i implement the movie logic
-    public Page<DirectorResponseDto> findAll(Pageable pageable) {
+    public Page<DirectorResponseDto> findAll(final Pageable pageable) {
+        logger.info("[Service]: Finding all directors");
         Page<Director> directorsPage = directorRepository.findAll(pageable);
         return directorsPage.map(directorMapper::toDto);
     }
 
     @Override
-    public DirectorResponseDto findById(Long id) {
+    public DirectorResponseDto findById(final Long id) {
+        logger.info("[Service]: Finding director by id: {}", id);
         Director directorFromDb = directorRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(CANNOT_FIND_DIRECTOR_BY_ID_MSG + id)
+                () -> {
+                    logger.error(CANNOT_FIND_DIRECTOR_BY_ID_MSG + "{}", id);
+                    return new EntityNotFoundException(CANNOT_FIND_DIRECTOR_BY_ID_MSG + id);
+                }
         );
         return directorMapper.toDto(directorFromDb);
     }
 
     @Override
-    public DirectorResponseDto saveDirector(DirectorCreateDto createDto) {
+    public DirectorResponseDto saveDirector(final DirectorCreateDto createDto) {
+        logger.info("[Service]: Saving director: {}", createDto);
         Director director = directorMapper.toModel(createDto);
         directorRepository.save(director);
         return directorMapper.toDto(director);
     }
 
     @Override
-    @Transactional // will replace with join once i implement the movie logic
-    public DirectorResponseDto updateDirector(Long id, DirectorUpdateDto updateDto) {
+    public DirectorResponseDto updateDirector(final Long id, final DirectorUpdateDto updateDto) {
+        logger.info("[Service]: Updating director with id: {}, updateDto: {}", id, updateDto);
         Director directorFromDb = directorRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(CANNOT_FIND_DIRECTOR_BY_ID_MSG + id)
+                () -> {
+                    logger.error(CANNOT_FIND_DIRECTOR_BY_ID_MSG + "{}", id);
+                    return new EntityNotFoundException(CANNOT_FIND_DIRECTOR_BY_ID_MSG + id);
+                }
         );
         setUpdatedFields(directorFromDb, updateDto);
         directorRepository.save(directorFromDb);
@@ -64,13 +74,17 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
+        logger.info("[Service]: Deleting director by id: {}", id);
         directorRepository.deleteById(id);
     }
 
-    private void setUpdatedFields(Director directorFromDb, DirectorUpdateDto updateDto) {
+    private void setUpdatedFields(final Director directorFromDb,
+                                  final DirectorUpdateDto updateDto) {
         Optional.ofNullable(updateDto.getName()).ifPresent(directorFromDb::setName);
         Optional.ofNullable(updateDto.getDescription()).ifPresent(directorFromDb::setDescription);
-        // setting movies if the list is present (will add once I implement the movie logic)
+        Optional.ofNullable(updateDto.getMovieIds()).ifPresent(
+                ids -> directorFromDb.setMovieList(ids.stream().map(Movie::new).toList())
+        );
     }
 }
