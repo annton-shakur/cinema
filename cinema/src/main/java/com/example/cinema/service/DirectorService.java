@@ -7,15 +7,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface DirectorService {
-    Page<DirectorResponseDto> searchByName(String name, Pageable pageable);
+    Page<DirectorResponseDto> searchByName(final String name, final Pageable pageable);
 
-    Page<DirectorResponseDto> findAll(Pageable pageable);
+    Page<DirectorResponseDto> findAll(final Pageable pageable);
 
-    DirectorResponseDto findById(Long id);
+    DirectorResponseDto findById(final Long id);
 
-    DirectorResponseDto saveDirector(DirectorCreateDto createDto);
+    DirectorResponseDto saveDirector(final DirectorCreateDto createDto);
 
-    DirectorResponseDto updateDirector(Long id, DirectorUpdateDto updateDto);
+    DirectorResponseDto updateDirector(final Long id, final DirectorUpdateDto updateDto);
 
-    void deleteById(Long id);
+    void deleteById(final Long id);
 }
