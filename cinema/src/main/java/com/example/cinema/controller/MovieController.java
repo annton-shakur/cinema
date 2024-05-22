@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ public class MovieController {
     private final MovieService movieService;
     private final Logger logger;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public Page<MovieResponseDto> getAllMovies(final Pageable pageable,
                                                @RequestParam(required = false) final String title
@@ -39,12 +41,14 @@ public class MovieController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public MovieResponseDto getById(@PathVariable final Long id) {
         logger.info("getById method was called with the next id: {}", id);
         return movieService.findById(id);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/search")
     Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
                                         final Pageable pageable
@@ -52,12 +56,14 @@ public class MovieController {
         return movieService.searchMovies(searchDto, pageable);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
     public MovieResponseDto saveMovie(@RequestBody final MovieCreateDto createDto) {
         logger.info("saveMovie method was called with the next dto: {}", createDto);
         return movieService.saveMovie(createDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/{id}")
     public MovieResponseDto updateById(@PathVariable final Long id,
                                        @RequestBody final MovieUpdateDto updateDto) {
@@ -65,6 +71,7 @@ public class MovieController {
         return movieService.updateMovie(id, updateDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +27,7 @@ public class ActorController {
     private final ActorService actorService;
     private final Logger logger;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public Page<ActorResponseDto> getAllActors(final Pageable pageable,
                                                @RequestParam(required = false) final String name
@@ -39,18 +41,21 @@ public class ActorController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public ActorResponseDto getById(@PathVariable final Long id) {
         logger.info("getById method was called with the next id: {}", id);
         return actorService.findById(id);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
     public ActorResponseDto saveActor(@RequestBody @Valid final ActorCreateDto createDto) {
         logger.info("saveActor method was called with the next dto: {}", createDto);
         return actorService.saveActor(createDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/{id}")
     public ActorResponseDto updateById(@PathVariable final Long id,
                                        @RequestBody final ActorUpdateDto updateDto
@@ -59,6 +64,7 @@ public class ActorController {
         return actorService.updateById(id, updateDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);

@@ -13,9 +13,9 @@ public interface CommentService {
 
     Page<CommentResponseDto> findByMovieId(final Pageable pageable, final Long movieId);
 
-    CommentResponseDto updateById(final Long id, final CommentUpdateDto updateDto);
+    CommentResponseDto updateById(final Long id, Long userId, final CommentUpdateDto updateDto);
 
     void deleteComment(final Long id);
 
-    CommentResponseDto saveComment(final CommentCreateDto createDto);
+    CommentResponseDto saveComment(final CommentCreateDto createDto, Long id);
 }
