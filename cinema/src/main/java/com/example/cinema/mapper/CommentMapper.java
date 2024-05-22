@@ -13,6 +13,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapperConfig.class)
 public interface CommentMapper {
 
+    @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "movieId", source = "movie.id")
     CommentResponseDto toDto(Comment comment);
 

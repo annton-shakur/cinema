@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +26,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final Logger logger;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public Page<CategoryResponseDto> getAllCategories(
             final Pageable pageable,
@@ -39,18 +41,21 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public CategoryResponseDto getById(@PathVariable final Long id) {
         logger.info("getById method was called with the next id: {}", id);
         return categoryService.findById(id);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
     public CategoryResponseDto saveCategory(@RequestBody final CategoryCreateDto createDto) {
         logger.info("saveCategory method was called with the next dto: {}", createDto);
         return categoryService.saveCategory(createDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/{id}")
     public CategoryResponseDto updateById(@PathVariable final Long id,
                                               @RequestBody final CategoryUpdateDto updateDto) {
@@ -58,6 +63,7 @@ public class CategoryController {
         return categoryService.updateCategory(id, updateDto);
     }
 
+    @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);

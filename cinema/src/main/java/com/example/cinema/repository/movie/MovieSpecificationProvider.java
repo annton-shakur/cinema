@@ -14,7 +14,7 @@ public class MovieSpecificationProvider implements SpecificationProviderManager<
     private final List<SpecificationProvider<Movie>> specificationProviders;
 
     @Override
-    public SpecificationProvider<Movie> getSpecificationProvider(String fieldName) {
+    public SpecificationProvider<Movie> getSpecificationProvider(final String fieldName) {
         return specificationProviders.stream()
                 .filter(sp -> fieldName.equals(sp.getFieldName()))
                 .findFirst()

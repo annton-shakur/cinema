@@ -6,5 +6,5 @@ public interface SpecificationProvider<T> {
 
     String getFieldName();
 
-    Specification<T> getSpecification(String[] params);
+    Specification<T> getSpecification(final String[] params);
 }
