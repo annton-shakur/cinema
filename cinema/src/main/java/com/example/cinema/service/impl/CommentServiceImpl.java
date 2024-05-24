@@ -77,16 +77,16 @@ public class CommentServiceImpl implements CommentService {
                 }
         );
         Role moderatorRole = roleRepository.findByRoleName(Role.RoleName.MODERATOR);
-        if (!commentFromDb.getUser().equals(userFromDb)
-                || !userFromDb.getRoles().contains(moderatorRole)) {
-            logger.error(new RuntimeException(
-                    "[Service]: Failed updating comment by user " + id + userId
-            ));
-            throw new RuntimeException("You are not allowed to edit this comment!");
+        if (commentFromDb.getUser().equals(userFromDb)
+                || userFromDb.getRoles().contains(moderatorRole)) {
+            commentFromDb.setContent(updateDto.getContent());
+            commentRepository.save(commentFromDb);
+            return commentMapper.toDto(commentFromDb);
         }
-        commentFromDb.setContent(updateDto.getContent());
-        commentRepository.save(commentFromDb);
-        return commentMapper.toDto(commentFromDb);
+        logger.error(new RuntimeException(
+                "[Service]: Failed updating comment by user " + id + userId
+        ));
+        throw new RuntimeException("You are not allowed to edit this comment!");
     }
 
     @Override

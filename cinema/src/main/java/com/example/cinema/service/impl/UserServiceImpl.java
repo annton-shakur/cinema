@@ -14,7 +14,7 @@ import com.example.cinema.repository.UserRepository;
 import com.example.cinema.service.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

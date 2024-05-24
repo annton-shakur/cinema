@@ -14,11 +14,16 @@ import com.example.cinema.repository.movie.MovieRepository;
 import com.example.cinema.repository.movie.MovieSpecificationBuilder;
 import com.example.cinema.service.MovieService;
 import jakarta.transaction.Transactional;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -89,11 +94,35 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
                                                final Pageable pageable
     ) {
         Specification<Movie> specification = specificationBuilder.build(searchDto);
-        return movieRepository.findAll(specification, pageable).map(movieMapper::toDto);
+        Set<Long> actorIds;
+        if (searchDto.getActors() != null) {
+            actorIds = Arrays.stream(searchDto.getActors())
+                    .map(Long::valueOf)
+                    .collect(Collectors.toSet());
+        } else {
+            actorIds = new HashSet<>();
+        }
+        Set<Long> categoryIds;
+        if (searchDto.getCategories() != null) {
+            categoryIds = Arrays.stream(searchDto.getCategories())
+                    .map(Long::valueOf)
+                    .collect(Collectors.toSet());
+        } else {
+            categoryIds = new HashSet<>();
+        }
+        List<MovieResponseDto> movieResponseDtoList = movieRepository
+                .findAll(specification, pageable)
+                .map(movieMapper::toDto)
+                .filter(dto -> new HashSet<>(dto.getActorIds()).containsAll(actorIds))
+                .filter(dto -> new HashSet<>(dto.getCategoryIds()).containsAll(categoryIds))
+                .toList();
+
+        return new PageImpl<>(movieResponseDtoList, pageable, movieResponseDtoList.size());
     }
 
     private void setUpdatedFields(final Movie movieFromDb, final MovieUpdateDto updateDto) {
