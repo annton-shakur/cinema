@@ -4,6 +4,8 @@ import com.example.cinema.dto.actor.ActorCreateDto;
 import com.example.cinema.dto.actor.ActorResponseDto;
 import com.example.cinema.dto.actor.ActorUpdateDto;
 import com.example.cinema.service.ActorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Actors management",
+        description = "Endpoints for viewing, adding and updating actors")
 @RestController
 @RequestMapping("/api/actors")
 @RequiredArgsConstructor
@@ -29,6 +33,8 @@ public class ActorController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
+    @Operation(summary = "Get all actors",
+            description = "Return a page of actors (optionally filtered by name)")
     public Page<ActorResponseDto> getAllActors(final Pageable pageable,
                                                @RequestParam(required = false) final String name
     ) {
@@ -43,6 +49,8 @@ public class ActorController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
+    @Operation(summary = "Get actor by id",
+            description = "Return an actor DTO mapped from entity found in DB by id")
     public ActorResponseDto getById(@PathVariable final Long id) {
         logger.info("getById method was called with the next id: {}", id);
         return actorService.findById(id);
@@ -50,6 +58,8 @@ public class ActorController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
+    @Operation(summary = "Add a new actor",
+            description = "Return a DTO of a newly-saved actor")
     public ActorResponseDto saveActor(@RequestBody @Valid final ActorCreateDto createDto) {
         logger.info("saveActor method was called with the next dto: {}", createDto);
         return actorService.saveActor(createDto);
@@ -57,6 +67,8 @@ public class ActorController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/{id}")
+    @Operation(summary = "Update actor by id",
+            description = "Update the specified actor fields and return its new version")
     public ActorResponseDto updateById(@PathVariable final Long id,
                                        @RequestBody final ActorUpdateDto updateDto
     ) {
@@ -66,6 +78,8 @@ public class ActorController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete actor by id",
+            description = "(soft) delete actor from DB by id")
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);
         actorService.deleteById(id);

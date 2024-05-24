@@ -5,6 +5,8 @@ import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
 import com.example.cinema.service.MovieService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Movies management",
+        description = "Endpoints for viewing, adding and updating movies")
 @RestController
 @RequestMapping("/api/movies")
 @RequiredArgsConstructor
@@ -29,6 +33,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
+    @Operation(summary = "Get all movies",
+            description = "Return a page of movies (optionally filtered by name)")
     public Page<MovieResponseDto> getAllMovies(final Pageable pageable,
                                                @RequestParam(required = false) final String title
     ) {
@@ -43,6 +49,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
+    @Operation(summary = "Get movie by id",
+            description = "Return a movie DTO mapped from entity found in DB by id")
     public MovieResponseDto getById(@PathVariable final Long id) {
         logger.info("getById method was called with the next id: {}", id);
         return movieService.findById(id);
@@ -50,7 +58,9 @@ public class MovieController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/search")
-    Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
+    @Operation(summary = "Search movies by different params",
+            description = "Search movies by dynamic params using criteria")
+    Page<MovieResponseDto> searchMovies(@RequestBody final MovieSearchParameters searchDto,
                                         final Pageable pageable
     ) {
         return movieService.searchMovies(searchDto, pageable);
@@ -58,6 +68,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @PostMapping
+    @Operation(summary = "Add a new movie",
+            description = "Return a DTO of a newly-saved movie")
     public MovieResponseDto saveMovie(@RequestBody final MovieCreateDto createDto) {
         logger.info("saveMovie method was called with the next dto: {}", createDto);
         return movieService.saveMovie(createDto);
@@ -65,6 +77,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @PatchMapping("/{id}")
+    @Operation(summary = "Update movie by id",
+            description = "Update the specified movie fields and return its new version")
     public MovieResponseDto updateById(@PathVariable final Long id,
                                        @RequestBody final MovieUpdateDto updateDto) {
         logger.info("updateById method was called for the next id and dto: {}, {}", id, updateDto);
@@ -73,6 +87,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete movie by id",
+            description = "(soft) delete movie from DB by id")
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);
         movieService.deleteById(id);
