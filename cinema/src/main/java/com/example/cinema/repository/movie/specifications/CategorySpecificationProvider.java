@@ -1,6 +1,7 @@
 package com.example.cinema.repository.movie.specifications;
 
 import com.example.cinema.model.Actor;
+import com.example.cinema.model.Category;
 import com.example.cinema.model.Movie;
 import com.example.cinema.repository.SpecificationProvider;
 import jakarta.persistence.criteria.Join;
@@ -18,11 +19,11 @@ public class CategorySpecificationProvider implements SpecificationProvider<Movi
         return CATEGORY_KEY;
     }
 
-    public Specification<Movie> getSpecification(String[] params) {
+    public Specification<Movie> getSpecification(final String[] params) {
         return (root, query, criteriaBuilder) -> {
-            Join<Movie, Actor> actorJoin = root.join(CATEGORY_KEY);
+            Join<Category, Actor> categoryJoin = root.join(CATEGORY_KEY);
             List<String> categoryIds = Arrays.asList(params);
-            return criteriaBuilder.isTrue(actorJoin.get("id").in(categoryIds));
+            return criteriaBuilder.isTrue(categoryJoin.get("id").in(categoryIds));
         };
     }
 }

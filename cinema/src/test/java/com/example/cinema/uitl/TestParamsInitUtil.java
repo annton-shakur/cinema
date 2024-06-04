@@ -169,7 +169,7 @@ public class TestParamsInitUtil {
         moderatorRole.setRoleName(Role.RoleName.MODERATOR);
 
         comment.setId(1L);
-        comment.setMovie(new Movie(1L, "Sample Movie", 120, "Sample Description", "http://example.com", LocalDateTime.now().toLocalDate(), null, Set.of(), Set.of(), Set.of(), false));
+        comment.setMovie(new Movie(1L, "Sample Movie", 120, "Sample Description", "http://example.com", LocalDateTime.now().toLocalDate(), null, Set.of(), Set.of(), List.of(), List.of(), 1.1, false));
         comment.setContent("Sample comment");
         comment.setCreationTime(LocalDateTime.now());
         comment.setUser(user);
@@ -205,10 +205,10 @@ public class TestParamsInitUtil {
         directorTarantinoWithoutId.setName("Quentin Tarantino");
         directorTarantinoWithoutId.setDescription("Famous director known for his unique style");
 
-        Movie pulpFiction = new Movie(1L, "Pulp Fiction", 154, "Crime film", "http://example.com/pulpfiction", LocalDate.of(1994, 10, 14), directorTarantino, Set.of(), Set.of(), Set.of(), false);
-        Movie killBill = new Movie(2L, "Kill Bill: Vol. 1", 111, "Martial arts film", "http://example.com/killbill", LocalDate.of(2003, 10, 10), directorTarantino, Set.of(), Set.of(), Set.of(), false);
-        Movie inception = new Movie(3L, "Inception", 148, "Science fiction film", "http://example.com/inception", LocalDate.of(2010, 7, 16), directorNolan, Set.of(), Set.of(), Set.of(), false);
-        Movie theDarkKnight = new Movie(4L, "The Dark Knight", 152, "Superhero film", "http://example.com/thedarkknight", LocalDate.of(2008, 7, 18), directorNolan, Set.of(), Set.of(), Set.of(), false);
+        Movie pulpFiction = new Movie(1L, "Pulp Fiction", 154, "Crime film", "http://example.com/pulpfiction", LocalDate.of(1994, 10, 14), directorTarantino, Set.of(), Set.of(), List.of(), List.of(),1.1,false);
+        Movie killBill = new Movie(2L, "Kill Bill: Vol. 1", 111, "Martial arts film", "http://example.com/killbill", LocalDate.of(2003, 10, 10), directorTarantino, Set.of(), Set.of(), List.of(), List.of(), 1.1, false);
+        Movie inception = new Movie(3L, "Inception", 148, "Science fiction film", "http://example.com/inception", LocalDate.of(2010, 7, 16), directorNolan, Set.of(), Set.of(), List.of(), List.of(), 1.1, false);
+        Movie theDarkKnight = new Movie(4L, "The Dark Knight", 152, "Superhero film", "http://example.com/thedarkknight", LocalDate.of(2008, 7, 18), directorNolan, Set.of(), Set.of(), List.of(), List.of(), 1.1, false);
         List<Movie> tarantinoMovies = List.of(pulpFiction, killBill);
         List<Movie> nolanMovies = List.of(inception, theDarkKnight);
 
@@ -279,7 +279,7 @@ public class TestParamsInitUtil {
         user.setPassword("testPassword");
         user.setRoles(Set.of());
 
-        final Set<Comment> comments = Set.of(
+        final List<Comment> comments = List.of(
                 new Comment(1L, null, "Great movie!",
                         LocalDateTime.now(), user, false),
                 new Comment(2L, null, "Amazing visuals and storyline.",

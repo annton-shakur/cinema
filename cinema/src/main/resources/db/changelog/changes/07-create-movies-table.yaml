@@ -41,9 +41,9 @@ databaseChangeLog:
                   name: director_id
                   type: bigint
                   constraints:
-                    primaryKey: true
-                    references: directors(id)
+                    nullable: false
                     foreignKeyName: fk_movies_director_id
+                    references: directors(id)
               - column:
                   name: is_deleted
                   type: boolean

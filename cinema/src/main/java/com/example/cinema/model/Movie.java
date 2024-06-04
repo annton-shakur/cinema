@@ -12,19 +12,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @SQLDelete(sql = "UPDATE movies SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted=false")
 @Table(name = "movies")
@@ -45,8 +41,6 @@ public class Movie {
     @ManyToOne
     @JoinColumn(name = "director_id", nullable = false)
     private Director director;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "movies_actors",
@@ -54,8 +48,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private Set<Actor> actors;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "movies_categories",
@@ -64,11 +56,48 @@ public class Movie {
     )
     private Set<Category> categories;
     @OneToMany(mappedBy = "movie")
-    private Set<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "movie")
+    private List<MovieRating> ratings;
+    @Column(name = "average_rating", nullable = false)
+    private Double averageRating;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
+    public Movie() {
+    }
+
     public Movie(Long id) {
         this.id = id;
+    }
+
+    public Movie(
+            Long id,
+            String title,
+            Integer duration,
+            String description,
+            String trailerUrl,
+            LocalDate releaseDate,
+            Director director,
+            Set<Actor> actors,
+            Set<Category> categories,
+            List<Comment> comments,
+            List<MovieRating> ratings,
+            Double averageRating,
+            boolean isDeleted
+    ) {
+        this.id = id;
+        this.title = title;
+        this.duration = duration;
+        this.description = description;
+        this.trailerUrl = trailerUrl;
+        this.releaseDate = releaseDate;
+        this.director = director;
+        this.actors = actors;
+        this.categories = categories;
+        this.comments = comments;
+        this.ratings = ratings;
+        this.averageRating = averageRating;
+        this.isDeleted = isDeleted;
     }
 }

@@ -13,6 +13,7 @@ public class MovieResponseDto {
     private String trailerUrl;
     private LocalDate releaseDate;
     private Long directorId;
+    private Double averageRating;
     private List<Long> actorIds;
     private List<Long> categoryIds;
     private List<Long> commentIds;

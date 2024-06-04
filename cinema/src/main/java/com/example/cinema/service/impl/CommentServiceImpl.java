@@ -6,12 +6,15 @@ import com.example.cinema.dto.comment.CommentUpdateDto;
 import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.CommentMapper;
 import com.example.cinema.model.Comment;
+import com.example.cinema.model.Movie;
 import com.example.cinema.model.Role;
 import com.example.cinema.model.User;
 import com.example.cinema.repository.CommentRepository;
 import com.example.cinema.repository.RoleRepository;
 import com.example.cinema.repository.UserRepository;
+import com.example.cinema.repository.movie.MovieRepository;
 import com.example.cinema.service.CommentService;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +27,11 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
     private static final String CANNOT_FIND_COMMENT_BY_ID_MSG = "Cannot find comment by id: ";
     private static final String CANNOT_FIND_USER_BY_ID_MSG = "Cannot find user by id: ";
+    private static final String CANNOT_FIND_MOVIE_BY_ID_MSG = "Cannot find movie by id ";
     private final CommentRepository commentRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final MovieRepository movieRepository;
     private final CommentMapper commentMapper;
     private final Logger logger;
 
@@ -96,6 +101,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentResponseDto saveComment(final CommentCreateDto createDto, Long id) {
         logger.info("[Service]: Saving new comment: {}", createDto);
         Comment comment = commentMapper.toModel(createDto);
@@ -108,6 +114,15 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(userFromDb);
         comment.setCreationTime(LocalDateTime.now());
         commentRepository.save(comment);
+        Long movieId = createDto.getMovieId();
+        Movie movieFromDb = movieRepository.findById(movieId).orElseThrow(
+                () -> {
+                    logger.error(CANNOT_FIND_MOVIE_BY_ID_MSG + "{}", movieId);
+                    return new EntityNotFoundException(CANNOT_FIND_MOVIE_BY_ID_MSG + movieId);
+                }
+        );
+        movieFromDb.getComments().add(comment);
+        movieRepository.save(movieFromDb);
         return commentMapper.toDto(comment);
     }
 }

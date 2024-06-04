@@ -7,4 +7,6 @@ public class MovieSearchParameters {
     private String[] director;
     private String[] actors;
     private String[] categories;
+    private String[] rating;
+    private String[] years;
 }
