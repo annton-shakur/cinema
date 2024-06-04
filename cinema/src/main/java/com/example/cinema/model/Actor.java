@@ -6,16 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @SQLDelete(sql = "UPDATE actors SET is_deleted = true WHERE id=?")
 @SQLRestriction("is_deleted=false")
 @Table(name = "actors")
@@ -32,7 +28,18 @@ public class Actor {
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
+    public Actor() {
+    }
+
     public Actor(Long id) {
         this.id = id;
+    }
+
+    public Actor(Long id, String name, Integer age, String description, boolean isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.description = description;
+        this.isDeleted = isDeleted;
     }
 }

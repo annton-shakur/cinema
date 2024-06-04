@@ -6,17 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
@@ -26,6 +22,14 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false, unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private RoleName roleName;
+
+    public Role() {
+    }
+
+    public Role(Long id, RoleName roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
 
     @Override
     public String getAuthority() {

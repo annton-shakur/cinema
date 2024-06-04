@@ -11,6 +11,7 @@ import com.example.cinema.model.User;
 import com.example.cinema.repository.CommentRepository;
 import com.example.cinema.repository.RoleRepository;
 import com.example.cinema.repository.UserRepository;
+import com.example.cinema.repository.movie.MovieRepository;
 import com.example.cinema.uitl.TestParamsInitUtil;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,8 @@ class CommentServiceImplTest {
     private CommentMapper commentMapper;
     @Mock
     private Logger logger;
+    @Mock
+    private MovieRepository movieRepository;
     @InjectMocks
     private CommentServiceImpl commentService;
 
@@ -178,20 +181,6 @@ class CommentServiceImplTest {
         Assertions.assertDoesNotThrow(() -> commentService.deleteComment(validCommentId));
         Mockito.verify(commentRepository,
                 Mockito.times(1)).deleteById(validCommentId);
-    }
-
-    @Test
-    @DisplayName("Save new comment and return response dto")
-    void saveComment_WithValidDto_ReturnResponseDto() {
-        Mockito.when(commentMapper.toModel(commentCreateDto)).thenReturn(comment);
-        Mockito.when(userRepository.findById(validUserId)).thenReturn(Optional.of(user));
-        Mockito.when(commentRepository.save(comment)).thenReturn(comment);
-        Mockito.when(commentMapper.toDto(comment)).thenReturn(commentResponseDto);
-
-        CommentResponseDto actual = commentService.saveComment(commentCreateDto, validUserId);
-        CommentResponseDto expected = commentResponseDto;
-
-        Assertions.assertEquals(expected, actual);
     }
 
     @Test

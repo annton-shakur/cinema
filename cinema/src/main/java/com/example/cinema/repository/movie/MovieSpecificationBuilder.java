@@ -39,6 +39,21 @@ public class MovieSpecificationBuilder implements SpecificationBuilder<Movie> {
             );
         }
 
+        if (searchParameters.getRating() != null
+                && searchParameters.getRating().length > 0) {
+            spec = spec.and(specificationProviderManager
+                    .getSpecificationProvider("rating")
+                    .getSpecification(searchParameters.getRating())
+            );
+        }
+
+        if (searchParameters.getYears() != null
+                && searchParameters.getYears().length > 0) {
+            spec = spec.and(specificationProviderManager
+                    .getSpecificationProvider("years")
+                    .getSpecification(searchParameters.getYears()));
+        }
+
         return spec;
     }
 }

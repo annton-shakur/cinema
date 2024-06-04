@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-columns-movies-table
+      author: anton dudar
+      changes:
+        - addColumn:
+            tableName: movies
+            columns:
+              - column:
+                  name: average_rating
+                  type: double
+                  defaultValueNumeric: 0.0
+                  constraints:
+                    nullable: false

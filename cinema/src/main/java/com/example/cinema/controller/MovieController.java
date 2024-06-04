@@ -4,14 +4,19 @@ import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
+import com.example.cinema.dto.rating.RatingCreateDto;
+import com.example.cinema.model.User;
 import com.example.cinema.service.MovieService;
+import com.example.cinema.service.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovieController {
     private final MovieService movieService;
     private final Logger logger;
+    private final RatingService ratingService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
@@ -92,5 +98,18 @@ public class MovieController {
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);
         movieService.deleteById(id);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/{id}/rate")
+    @Operation(summary = "Add movie rating",
+            description = "Rate movie from 1 to 5 and gets its dto as a response")
+    public MovieResponseDto rateMovie(@PathVariable final Long id,
+                                      @RequestBody @Valid final RatingCreateDto createDto,
+                                      final Authentication authentication
+    ) {
+        logger.info("rate movie method was called for the next id: {}", id);
+        User user = (User) authentication.getPrincipal();
+        return ratingService.rateByMovieId(id, createDto, user.getId());
     }
 }

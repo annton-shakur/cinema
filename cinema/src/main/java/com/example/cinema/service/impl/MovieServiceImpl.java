@@ -54,6 +54,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public MovieResponseDto findById(final Long id) {
         logger.info("[Service]: Finding movie by id: {}", id);
         Movie movieFromDb = movieRepository.findById(id).orElseThrow(
@@ -69,6 +70,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieResponseDto saveMovie(final MovieCreateDto createDto) {
         logger.info("[Service]: Saving movie: {}", createDto);
         Movie movie = movieMapper.toModel(createDto);
+        movie.setAverageRating(0.0);
         movieRepository.save(movie);
         return movieMapper.toDto(movie);
     }

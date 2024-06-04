@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    public static final String CANNOT_FIND_USER_BY_ID_MSG = "Cannot find user by id: ";
+    private static final String CANNOT_FIND_USER_BY_ID_MSG = "Cannot find user by id: ";
+    private static final String EMAIL_FAILS_MSG = "Cannot register user with the provider email: ";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -31,8 +32,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto register(final UserRegistrationRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            logger.error(new RegistrationException(EMAIL_FAILS_MSG + requestDto.getEmail()));
             throw new RegistrationException(
-                    "Cannot register user with the provider email: " + requestDto.getEmail()
+                    EMAIL_FAILS_MSG + requestDto.getEmail()
             );
         }
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));

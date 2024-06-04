@@ -1,9 +1,8 @@
 package com.example.cinema.repository.movie.specifications;
 
-import com.example.cinema.model.Director;
 import com.example.cinema.model.Movie;
 import com.example.cinema.repository.SpecificationProvider;
-import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +10,23 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DirectorSpecificationProvider implements SpecificationProvider<Movie> {
-    private static final String DIRECTOR_KEY = "director";
+public class DateSpecificationProvider implements SpecificationProvider<Movie> {
+    private static final String DATE_KEY = "years";
 
     @Override
     public String getFieldName() {
-        return DIRECTOR_KEY;
+        return DATE_KEY;
     }
 
+    @Override
     public Specification<Movie> getSpecification(final String[] params) {
         return (root, query, criteriaBuilder) -> {
-            Join<Movie, Director> directorJoin = root.join(DIRECTOR_KEY);
+            Expression<Integer> yearExpression = criteriaBuilder
+                    .function("year", Integer.class, root.get("releaseDate"));
             List<Predicate> predicates = new ArrayList<>();
-            for (String directorId : params) {
-                predicates.add(criteriaBuilder.equal(directorJoin.get("id"), directorId));
+            for (String param : params) {
+                int year = Integer.parseInt(param);
+                predicates.add(criteriaBuilder.equal(yearExpression, year));
             }
             return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create-comments-table" author="anton dudar">
+        <sql endDelimiter="/" stripComments="false" raw="true">
+            CREATE TABLE comments (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            movie_id BIGINT NOT NULL,
+            content TEXT NOT NULL,
+            creation_time DATETIME NOT NULL,
+            user_id BIGINT NOT NULL,
+            FOREIGN KEY (movie_id) REFERENCES movies(id),
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            is_deleted BOOLEAN NOT NULL DEFAULT false
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
