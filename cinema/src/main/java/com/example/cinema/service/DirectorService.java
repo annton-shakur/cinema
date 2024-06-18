@@ -3,11 +3,14 @@ package com.example.cinema.service;
 import com.example.cinema.dto.director.DirectorCreateDto;
 import com.example.cinema.dto.director.DirectorResponseDto;
 import com.example.cinema.dto.director.DirectorUpdateDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface DirectorService {
     Page<DirectorResponseDto> searchByName(final String name, final Pageable pageable);
+
+    List<DirectorResponseDto> searchByName(final String name);
 
     Page<DirectorResponseDto> findAll(final Pageable pageable);
 

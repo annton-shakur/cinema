@@ -36,6 +36,8 @@ public class User implements UserDetails {
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -47,19 +49,21 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     public User(
-            Long id,
-            String email,
-            String password,
-            String firstName,
-            String lastName,
-            boolean isDeleted,
-            Set<Role> roles
+            final Long id,
+            final String email,
+            final String password,
+            final String firstName,
+            final String lastName,
+            final String imageUrl,
+            final boolean isDeleted,
+            final Set<Role> roles
     ) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
         this.roles = roles;
     }

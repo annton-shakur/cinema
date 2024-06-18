@@ -8,6 +8,7 @@ import com.example.cinema.mapper.CategoryMapper;
 import com.example.cinema.model.Category;
 import com.example.cinema.repository.CategoryRepository;
 import com.example.cinema.service.CategoryService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryResponseDto> searchByName(final String name, final Pageable pageable) {
-        logger.info("[Service]: Searching categories by name: {}", name);
+        logger.info("[Service]: Searching categories (page) by name: {}", name);
         Page<Category> categoriesFromDb = categoryRepository
                 .findByNameStartingWithIgnoreCase(name, pageable);
         return categoriesFromDb.map(categoryMapper::toDto);
@@ -70,6 +71,15 @@ public class CategoryServiceImpl implements CategoryService {
         setUpdatedFields(categoryFromDb, updateDto);
         categoryRepository.save(categoryFromDb);
         return categoryMapper.toDto(categoryFromDb);
+    }
+
+    @Override
+    public List<CategoryResponseDto> getCategoriesByName(final String name) {
+        logger.info("[Service]: Searching categories (list) by name: {}", name);
+        return categoryRepository.findByNameStartingWithIgnoreCase(name)
+                .stream()
+                .map(categoryMapper::toDto)
+                .toList();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.example.cinema.dto.director;
 
 import jakarta.validation.constraints.NotBlank;
-import java.util.List;
 import lombok.Data;
 
 @Data
@@ -11,5 +10,5 @@ public class DirectorCreateDto {
     private String name;
     @NotBlank(message = CANNOT_BE_NULL_MSG)
     private String description;
-    private List<Long> movieIds;
+    private String imageUrl;
 }

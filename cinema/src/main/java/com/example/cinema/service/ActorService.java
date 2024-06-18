@@ -3,6 +3,7 @@ package com.example.cinema.service;
 import com.example.cinema.dto.actor.ActorCreateDto;
 import com.example.cinema.dto.actor.ActorResponseDto;
 import com.example.cinema.dto.actor.ActorUpdateDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,4 +20,6 @@ public interface ActorService {
     void deleteById(final Long id);
 
     Page<ActorResponseDto> searchByName(final String name, final Pageable pageable);
+
+    List<ActorResponseDto> searchByName(final String name);
 }

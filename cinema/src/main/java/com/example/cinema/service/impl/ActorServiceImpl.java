@@ -8,6 +8,7 @@ import com.example.cinema.mapper.ActorMapper;
 import com.example.cinema.model.Actor;
 import com.example.cinema.repository.ActorRepository;
 import com.example.cinema.service.ActorService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -69,9 +70,18 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public Page<ActorResponseDto> searchByName(final String name, final Pageable pageable) {
-        logger.info("[Service]: Searching for actors by name: {}", name);
+        logger.info("[Service]: Searching for actors by name (pageable): {}", name);
         return actorRepository.findByNameStartingWithIgnoreCase(name, pageable)
                 .map(actorMapper::toDto);
+    }
+
+    @Override
+    public List<ActorResponseDto> searchByName(final String name) {
+        logger.info("[Service]: Searching for actors by name (list): {}", name);
+        return actorRepository.findByNameStartingWithIgnoreCase(name)
+                .stream()
+                .map(actorMapper::toDto)
+                .toList();
     }
 
     private void setUpdatedFields(final Actor actorFromDb, final ActorUpdateDto updateDto) {

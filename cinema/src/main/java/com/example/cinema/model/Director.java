@@ -5,9 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -25,28 +23,29 @@ public class Director {
     private String name;
     @Column(nullable = false)
     private String description;
-    @OneToMany(mappedBy = "director")
-    private List<Movie> movieList;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     public Director() {
     }
 
-    public Director(Long id) {
+    public Director(final Long id) {
         this.id = id;
     }
 
-    public Director(Long id,
-                    String name,
-                    String description,
-                    List<Movie> movieList,
-                    boolean isDeleted
+    public Director(
+            final Long id,
+            final String name,
+            final String description,
+            final String imageUrl,
+            final boolean isDeleted
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.movieList = movieList;
+        this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
     }
 }

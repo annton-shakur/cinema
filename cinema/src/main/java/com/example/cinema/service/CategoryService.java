@@ -3,6 +3,7 @@ package com.example.cinema.service;
 import com.example.cinema.dto.category.CategoryCreateDto;
 import com.example.cinema.dto.category.CategoryResponseDto;
 import com.example.cinema.dto.category.CategoryUpdateDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,6 +17,8 @@ public interface CategoryService {
     CategoryResponseDto saveCategory(final CategoryCreateDto createDto);
 
     CategoryResponseDto updateCategory(final Long id, final CategoryUpdateDto updateDto);
+
+    List<CategoryResponseDto> getCategoriesByName(final String name);
 
     void deleteById(final Long id);
 }

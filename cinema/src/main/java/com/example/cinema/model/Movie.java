@@ -61,6 +61,8 @@ public class Movie {
     private List<MovieRating> ratings;
     @Column(name = "average_rating", nullable = false)
     private Double averageRating;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
@@ -71,20 +73,20 @@ public class Movie {
         this.id = id;
     }
 
-    public Movie(
-            Long id,
-            String title,
-            Integer duration,
-            String description,
-            String trailerUrl,
-            LocalDate releaseDate,
-            Director director,
-            Set<Actor> actors,
-            Set<Category> categories,
-            List<Comment> comments,
-            List<MovieRating> ratings,
-            Double averageRating,
-            boolean isDeleted
+    public Movie(Long id,
+                 String title,
+                 Integer duration,
+                 String description,
+                 String trailerUrl,
+                 LocalDate releaseDate,
+                 Director director,
+                 Set<Actor> actors,
+                 Set<Category> categories,
+                 List<Comment> comments,
+                 List<MovieRating> ratings,
+                 Double averageRating,
+                 String imageUrl,
+                 boolean isDeleted
     ) {
         this.id = id;
         this.title = title;
@@ -98,6 +100,7 @@ public class Movie {
         this.comments = comments;
         this.ratings = ratings;
         this.averageRating = averageRating;
+        this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
     }
 }

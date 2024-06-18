@@ -4,6 +4,7 @@ import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,4 +23,8 @@ public interface MovieService {
 
     Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
                                         final Pageable pageable);
+
+    List<MovieResponseDto> findAllByActorId(final Long id);
+
+    List<MovieResponseDto> findAllByDirectorId(final Long id);
 }

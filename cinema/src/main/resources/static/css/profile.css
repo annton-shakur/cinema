@@ -1,0 +1,86 @@
+body.bg-light {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.profile-header {
+    margin-bottom: 30px;
+}
+
+.profile-avatar img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.profile-email {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+.profile-details {
+    margin-top: 20px;
+}
+
+.profile-section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.list-group-item strong {
+    display: inline-block;
+    width: 150px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .profile-avatar img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-name {
+        font-size: 20px;
+    }
+
+    .profile-email {
+        font-size: 16px;
+    }
+
+    .list-group-item strong {
+        width: 100px;
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

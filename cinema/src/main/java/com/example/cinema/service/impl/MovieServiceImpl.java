@@ -1,5 +1,7 @@
 package com.example.cinema.service.impl;
 
+import com.example.cinema.dto.actor.ActorResponseDto;
+import com.example.cinema.dto.category.CategoryResponseDto;
 import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.dto.movie.MovieSearchParameters;
@@ -54,7 +56,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    @Transactional
     public MovieResponseDto findById(final Long id) {
         logger.info("[Service]: Finding movie by id: {}", id);
         Movie movieFromDb = movieRepository.findById(id).orElseThrow(
@@ -120,11 +121,32 @@ public class MovieServiceImpl implements MovieService {
         List<MovieResponseDto> movieResponseDtoList = movieRepository
                 .findAll(specification, pageable)
                 .map(movieMapper::toDto)
-                .filter(dto -> new HashSet<>(dto.getActorIds()).containsAll(actorIds))
-                .filter(dto -> new HashSet<>(dto.getCategoryIds()).containsAll(categoryIds))
+                .filter(dto -> new HashSet<>(
+                        dto.getActors().stream().map(ActorResponseDto::getId).toList())
+                        .containsAll(actorIds))
+                .filter(dto -> new HashSet<>(
+                        dto.getCategories().stream().map(CategoryResponseDto::getId).toList())
+                        .containsAll(categoryIds))
                 .toList();
 
         return new PageImpl<>(movieResponseDtoList, pageable, movieResponseDtoList.size());
+    }
+
+    @Override
+    @Transactional
+    public List<MovieResponseDto> findAllByActorId(final Long id) {
+        return movieRepository.findByActorsId(id)
+                .stream()
+                .map(movieMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<MovieResponseDto> findAllByDirectorId(final Long id) {
+        return movieRepository.findAllByDirectorId(id)
+                .stream()
+                .map(movieMapper::toDto)
+                .toList();
     }
 
     private void setUpdatedFields(final Movie movieFromDb, final MovieUpdateDto updateDto) {

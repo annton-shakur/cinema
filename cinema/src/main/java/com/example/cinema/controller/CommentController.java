@@ -62,7 +62,7 @@ public class CommentController {
     @Operation(summary = "Add a new comment",
             description = "Return a DTO of a newly-saved comment")
     CommentResponseDto addComment(@RequestBody final CommentCreateDto createDto,
-                                               Authentication authentication
+                                               final Authentication authentication
     ) {
         logger.info("addComment method was called with the next dto: {}", createDto);
         User user = (User) authentication.getPrincipal();

@@ -63,7 +63,7 @@ public class RatingServiceImpl implements RatingService {
         return movieMapper.toDto(movieFromDb);
     }
 
-    private double getAverageRating(Movie movieFromDb) {
+    private double getAverageRating(final Movie movieFromDb) {
         return movieFromDb.getRatings()
                 .stream()
                 .mapToInt(MovieRating::getRating)

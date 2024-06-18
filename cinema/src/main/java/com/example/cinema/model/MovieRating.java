@@ -30,7 +30,7 @@ public class MovieRating {
     public MovieRating() {
     }
 
-    public MovieRating(User user, Movie movie, Integer rating) {
+    public MovieRating(final User user, final Movie movie, final Integer rating) {
         this.user = user;
         this.movie = movie;
         this.rating = rating;
