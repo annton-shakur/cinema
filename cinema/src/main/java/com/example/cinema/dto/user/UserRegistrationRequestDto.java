@@ -20,4 +20,5 @@ public class UserRegistrationRequestDto {
     private String firstName;
     @NotBlank (message = CANNOT_BE_NULL_OR_BLANK_MSG)
     private String lastName;
+    private String imageUrl;
 }

@@ -10,4 +10,6 @@ public interface UserService {
 
     UserWithRolesResponseDto updateUserRole(final Long id,
                                             final UserRoleUpdateRequestDto requestDto);
+
+    UserResponseDto findById(final Long id);
 }

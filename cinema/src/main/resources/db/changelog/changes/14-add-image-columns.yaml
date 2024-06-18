@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-image-columns
+      author: anton dudar
+      changes:
+        - addColumn:
+            tableName: movies
+            columns:
+              - column:
+                  name: image_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: actors
+            columns:
+              - column:
+                  name: image_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: image_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: directors
+            columns:
+              - column:
+                  name: image_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

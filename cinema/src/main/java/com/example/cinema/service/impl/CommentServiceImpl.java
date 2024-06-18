@@ -102,7 +102,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentResponseDto saveComment(final CommentCreateDto createDto, Long id) {
+    public CommentResponseDto saveComment(final CommentCreateDto createDto,
+                                          final Long id) {
         logger.info("[Service]: Saving new comment: {}", createDto);
         Comment comment = commentMapper.toModel(createDto);
         User userFromDb = userRepository.findById(id).orElseThrow(

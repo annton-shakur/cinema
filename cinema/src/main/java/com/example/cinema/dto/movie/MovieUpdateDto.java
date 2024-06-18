@@ -13,6 +13,7 @@ public class MovieUpdateDto {
     private String trailerUrl;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
+    private String imageUrl;
     private Long directorId;
     private List<Long> actorIds;
     private List<Long> categoryIds;

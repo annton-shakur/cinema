@@ -23,6 +23,7 @@ public class MovieCreateDto {
     private LocalDate releaseDate;
     @NotNull
     private Long directorId;
+    private String imageUrl;
     private List<Long> actorIds;
     private List<Long> categoryIds;
 }

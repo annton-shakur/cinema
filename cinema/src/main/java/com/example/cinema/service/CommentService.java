@@ -17,5 +17,5 @@ public interface CommentService {
 
     void deleteComment(final Long id);
 
-    CommentResponseDto saveComment(final CommentCreateDto createDto, Long id);
+    CommentResponseDto saveComment(final CommentCreateDto createDto, final Long id);
 }

@@ -1,0 +1,102 @@
+.feature {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  font-size: 1.5rem;
+}
+
+.bg-featured-blog {
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 15rem;
+}
+
+.movie-card {
+    display: flex;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+}
+.movie-poster {
+    flex: 0 0 200px;
+    margin-right: 20px;
+}
+.movie-details {
+    flex: 1;
+}
+.movie-details p {
+    margin: 5px 0;
+}
+
+.selected-actor, .category-tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 5px 5px 0 0;
+  background-color: #eee;
+  color: black;
+  cursor: default;
+}
+
+.selected-actor:hover, .category-tag:hover {
+  background-color: #ddd;
+}
+
+.remove-actor, .remove-category {
+  color: #999;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.my-custom-form-class {
+  width: 250px;
+}
+
+.search-button {
+  margin-right: 300px;
+}
+
+#advancedSearchForm .card-body {
+    background-color: #343a40;
+    color: white;
+    border: none;
+}
+
+#advancedSearchForm .form-label {
+    color: #f8f9fa;
+}
+
+#advancedSearchForm .form-control {
+    background-color: #495057;
+    color: white;
+    border: none;
+}
+
+#advancedSearchForm .form-control:focus {
+    background-color: #495057;
+    color: white;
+    outline: none;
+    box-shadow: none;
+}
+
+#advancedSearchForm .btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+#advancedSearchForm .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    background: #343a40;
+    color: white;
+    padding: 1rem 0;
+}

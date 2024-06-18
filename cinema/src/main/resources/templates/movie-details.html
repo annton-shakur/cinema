@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <link th:href="@{/css/movie-detail.css}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column h-100">
+<main layout:fragment="body" class="flex-shrink-0">
+    <section class="container movie-details">
+        <div class="row">
+            <div class="col-md-4">
+                <img th:src="${movie.imageUrl}" class="movie-poster" alt="Movie Poster">
+            </div>
+            <div class="col-md-8">
+                <h1 th:text="${movie.title}">Movie Title</h1>
+                <p><strong>Average Rating:</strong> <span th:text="${movie.averageRating}"></span></p>
+                <p><strong>Duration:</strong> <span th:text="${movie.duration} + ' min'"></span></p>
+                <p><strong>Release Date:</strong> <span th:text="${movie.releaseDate}"></span></p>
+                <p><strong>Trailer:</strong> <a th:href="${movie.trailerUrl}" target="_blank">Watch Trailer</a></p>
+                <p><strong>Director: </strong><a th:href="@{/directors/{id}(id=${movie.director.id})}"
+                                                 th:text="${movie.director.name}"></a>
+                <div>
+                    <h1 class="section-title">Actors:</h1>
+                    <ul class="list-group">
+                        <li th:each="actor : ${movie.actors}" class="list-group-item actor-item">
+                            <a th:href="@{/actors/{id}(id=${actor.id})}" th:text="${actor.name}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="section-title">Categories:</h4>
+                    <ul class="list-group">
+                        <li th:each="category : ${movie.categories}" class="list-group-item category-item">
+                            <a th:href="@{/categories/{id}(id=${category.id})}" th:text="${category.name}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="rating-form-container">
+            <h4 class="section-title">Rate this movie</h4>
+            <form th:action="@{/movies/{id}/rate(id=${movie.id})}" method="post" class="rating-form">
+                <div class="form-group">
+                    <label for="rating">Your Rating:</label>
+                    <select class="form-control" id="rating" name="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Rating</button>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="section-title">Description:</p>
+                <p th:text="${movie.description}"></p>
+                <div>
+                    <h4 class="section-title">Comments:</h4>
+                    <ul class="list-group">
+                        <li th:each="comment : ${movie.comments}" class="list-group-item comment-item">
+                            <p th:text="${comment.content}"></p>
+                            <p class="comment-time" th:text="${comment.creationTime}"></p>
+                        </li>
+                    </ul>
+                </div>
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <h4 class="section-title">Add a Comment:</h4>
+                    <form th:action="@{/comments}" method="post" class="comment-form">
+                        <input type="hidden" name="movieId" th:value="${movie.id}">
+                        <div class="form-group">
+                            <textarea class="form-control" name="content" rows="3" placeholder="Write your comment here..."
+                                      required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

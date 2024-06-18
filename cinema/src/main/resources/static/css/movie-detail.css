@@ -1,0 +1,68 @@
+.movie-details {
+    margin-top: 20px;
+}
+
+.movie-poster {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.section-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.actor-item,
+.category-item,
+.comment-item {
+    margin-bottom: 10px;
+}
+
+.comment-time {
+    font-size: 0.85em;
+    color: #666;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+.comment-item {
+    position: relative;
+    padding-right: 50px;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.rating-form-container {
+    position: fixed;
+    top: 57px;
+    right: 0px;
+    width: 200px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rating-form-container .section-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.rating-form-container .form-group {
+    margin-bottom: 15px;
+}
+
+.rating-form-container button[type="submit"] {
+    width: 100%;
+}

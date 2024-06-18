@@ -25,21 +25,30 @@ public class Actor {
     private Integer age;
     @Column(nullable = false)
     private String description;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     public Actor() {
     }
 
-    public Actor(Long id) {
+    public Actor(final Long id) {
         this.id = id;
     }
 
-    public Actor(Long id, String name, Integer age, String description, boolean isDeleted) {
+    public Actor(final Long id,
+                 final String name,
+                 final Integer age,
+                 final String description,
+                 final String imageUrl,
+                 final boolean isDeleted
+    ) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.description = description;
+        this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
     }
 }

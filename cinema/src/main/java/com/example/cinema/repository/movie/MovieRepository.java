@@ -1,6 +1,7 @@
 package com.example.cinema.repository.movie;
 
 import com.example.cinema.model.Movie;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,10 @@ public interface MovieRepository
 
     @EntityGraph(attributePaths = {"director", "actors", "categories", "comments"})
     Page<Movie> findAll(final Pageable pageable);
+
+    @EntityGraph(attributePaths = "director")
+    List<Movie> findByActorsId(final Long actorId);
+
+    @EntityGraph(attributePaths = {"director", "actors", "categories", "comments"})
+    List<Movie> findAllByDirectorId(final Long id);
 }

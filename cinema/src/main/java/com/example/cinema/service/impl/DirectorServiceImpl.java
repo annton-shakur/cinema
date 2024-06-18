@@ -6,9 +6,9 @@ import com.example.cinema.dto.director.DirectorUpdateDto;
 import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.DirectorMapper;
 import com.example.cinema.model.Director;
-import com.example.cinema.model.Movie;
 import com.example.cinema.repository.DirectorRepository;
 import com.example.cinema.service.DirectorService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
@@ -26,10 +26,19 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public Page<DirectorResponseDto> searchByName(final String name, final Pageable pageable) {
-        logger.info("[Service]: Searching directors by name: {}", name);
+        logger.info("[Service]: Searching directors (pageable) by name: {}", name);
         Page<Director> directorsPage = directorRepository
                 .findByNameStartingWithIgnoreCase(name, pageable);
         return directorsPage.map(directorMapper::toDto);
+    }
+
+    @Override
+    public List<DirectorResponseDto> searchByName(final String name) {
+        logger.info("[Service]: Searching directors (list) by name: {}", name);
+        return directorRepository.findByNameStartingWithIgnoreCase(name)
+                .stream()
+                .map(directorMapper::toDto)
+                .toList();
     }
 
     @Override
@@ -83,8 +92,5 @@ public class DirectorServiceImpl implements DirectorService {
                                   final DirectorUpdateDto updateDto) {
         Optional.ofNullable(updateDto.getName()).ifPresent(directorFromDb::setName);
         Optional.ofNullable(updateDto.getDescription()).ifPresent(directorFromDb::setDescription);
-        Optional.ofNullable(updateDto.getMovieIds()).ifPresent(
-                ids -> directorFromDb.setMovieList(ids.stream().map(Movie::new).toList())
-        );
     }
 }

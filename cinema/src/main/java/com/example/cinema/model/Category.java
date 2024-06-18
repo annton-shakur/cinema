@@ -27,11 +27,11 @@ public class Category {
     public Category() {
     }
 
-    public Category(Long id) {
+    public Category(final Long id) {
         this.id = id;
     }
 
-    public Category(Long id, String name, boolean isDeleted) {
+    public Category(final Long id, final String name, final boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.isDeleted = isDeleted;

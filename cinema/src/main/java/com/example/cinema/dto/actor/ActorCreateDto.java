@@ -13,4 +13,6 @@ public class ActorCreateDto {
     private Integer age;
     @NotBlank(message = CANNOT_BE_NULL_MSG)
     private String description;
+    @NotBlank(message = CANNOT_BE_NULL_MSG)
+    private String imageUrl;
 }

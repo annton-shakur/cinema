@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
                     EMAIL_FAILS_MSG + requestDto.getEmail()
             );
         }
+        logger.info("The next user is being registered: {}", requestDto);
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         Role userRole = roleRepository.findByRoleName(Role.RoleName.USER);
         User user = userMapper.toModel(requestDto);
@@ -59,5 +60,16 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(user);
         return userMapper.toDtoWithRoles(updatedUser);
+    }
+
+    @Override
+    public UserResponseDto findById(final Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> {
+                    logger.error(new EntityNotFoundException(CANNOT_FIND_USER_BY_ID_MSG + id));
+                    return new EntityNotFoundException(CANNOT_FIND_USER_BY_ID_MSG + id);
+                }
+        );
+        return userMapper.toDto(user);
     }
 }

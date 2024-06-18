@@ -7,6 +7,7 @@ import com.example.cinema.service.DirectorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public class DirectorController {
                                              @RequestParam(required = false) final String name
     ) {
         if (name != null) {
-            logger.info("getAllDirectors method was called with the next name: {}", name);
+            logger.info("getAllDirectors method (pageable) called with the next name: {}", name);
             return directorService.searchByName(name, pageable);
         } else {
             logger.info("Default getAllDirectors method was called");
@@ -74,6 +75,15 @@ public class DirectorController {
     ) {
         logger.info("updateById method was called for the next id and dto: {}, {}", id, updateDto);
         return directorService.updateDirector(id, updateDto);
+    }
+
+    @PreAuthorize("hasRole('MODERATOR')")
+    @GetMapping("/search")
+    @Operation(summary = "Get directors by name",
+            description = "Return a list of directors filtered by name")
+    List<DirectorResponseDto> searchByName(@RequestParam final String name) {
+        logger.info("searchByName method (list) was called with the next name: {}", name);
+        return directorService.searchByName(name);
     }
 
     @PreAuthorize("hasRole('MODERATOR')")

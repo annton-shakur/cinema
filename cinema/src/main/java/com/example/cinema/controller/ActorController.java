@@ -7,6 +7,7 @@ import com.example.cinema.service.ActorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -83,5 +84,14 @@ public class ActorController {
     public void deleteById(@PathVariable final Long id) {
         logger.info("delete method was called for the next id: {}", id);
         actorService.deleteById(id);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/search")
+    @Operation(summary = "Get actors by name",
+            description = "Return a list of actors filtered by name")
+    List<ActorResponseDto> searchByName(@RequestParam final String name) {
+        logger.info("searchByName method was called with the next name: {}", name);
+        return actorService.searchByName(name);
     }
 }

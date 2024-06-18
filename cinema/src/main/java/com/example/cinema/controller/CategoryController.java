@@ -6,6 +6,7 @@ import com.example.cinema.dto.category.CategoryUpdateDto;
 import com.example.cinema.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -73,6 +74,15 @@ public class CategoryController {
                                               @RequestBody final CategoryUpdateDto updateDto) {
         logger.info("updateById method was called for the next id and dto: {}, {}", id, updateDto);
         return categoryService.updateCategory(id, updateDto);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/search")
+    @Operation(summary = "Get categories by name",
+            description = "Return a list of categories filtered by name")
+    public List<CategoryResponseDto> searchByName(@RequestParam final String name) {
+        logger.info("searchByName method was called with the next name: {}", name);
+        return categoryService.getCategoriesByName(name);
     }
 
     @PreAuthorize("hasRole('MODERATOR')")

@@ -8,4 +8,5 @@ public class ActorResponseDto {
     private String name;
     private Integer age;
     private String description;
+    private String imageUrl;
 }

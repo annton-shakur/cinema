@@ -39,12 +39,12 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long id,
-                   Movie movie,
-                   String content,
-                   LocalDateTime creationTime,
-                   User user,
-                   boolean isDeleted
+    public Comment(final Long id,
+                   final Movie movie,
+                   final String content,
+                   final LocalDateTime creationTime,
+                   final User user,
+                   final boolean isDeleted
     ) {
         this.id = id;
         this.movie = movie;
