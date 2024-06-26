@@ -7,9 +7,9 @@ import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.ActorMapper;
 import com.example.cinema.model.Actor;
 import com.example.cinema.repository.ActorRepository;
-import com.example.cinema.uitl.TestParamsInitUtil;
 import java.util.List;
 import java.util.Optional;
+import com.example.cinema.util.TestParamsInitUtil;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,13 +31,20 @@ class ActorServiceImplTest {
     private static Actor actorOne;
     private static Actor actorTwo;
     private static Actor actorThree;
-    private static Actor actorOneWithoutId;
+    private static Actor actorFour;
+    private static Actor actorFive;
     private static ActorCreateDto actorOneCreateDto;
+    private static ActorCreateDto actorTwoCreateDto;
+    private static ActorCreateDto actorThreeCreateDto;
+    private static ActorCreateDto actorFourCreateDto;
+    private static ActorCreateDto actorFiveCreateDto;
     private static ActorResponseDto actorOneResponseDto;
     private static ActorResponseDto actorTwoResponseDto;
+    private static ActorResponseDto actorThreeResponseDto;
+    private static ActorResponseDto actorFourResponseDto;
+    private static ActorResponseDto actorFiveResponseDto;
     private static ActorUpdateDto actorOneUpdateDto;
     private static ActorResponseDto updatedActorOneResponseDto;
-    private static ActorResponseDto actorThreeResponseDto;
     private static Long validId;
     private static Long invalidId;
     private static String searchParam;
@@ -68,27 +75,52 @@ class ActorServiceImplTest {
         actorOne = new Actor();
         actorTwo = new Actor();
         actorThree = new Actor();
-        actorOneWithoutId = new Actor();
+        actorFour = new Actor();
+        actorFive = new Actor();
         TestParamsInitUtil.initializeActorModels(actorOne, actorTwo,
-                actorThree, actorOneWithoutId);
+                actorThree, actorFour, actorFive);
 
         actorOneCreateDto = new ActorCreateDto();
+        actorTwoCreateDto = new ActorCreateDto();
+        actorThreeCreateDto = new ActorCreateDto();
+        actorFourCreateDto = new ActorCreateDto();
+        actorFiveCreateDto = new ActorCreateDto();
+
         actorOneResponseDto = new ActorResponseDto();
         actorTwoResponseDto = new ActorResponseDto();
         actorThreeResponseDto = new ActorResponseDto();
+        actorFourResponseDto = new ActorResponseDto();
+        actorFiveResponseDto = new ActorResponseDto();
         actorOneUpdateDto = new ActorUpdateDto();
         updatedActorOneResponseDto = new ActorResponseDto();
-        TestParamsInitUtil.initializeActorDtos(actorOneCreateDto, actorOneResponseDto,
-                actorTwoResponseDto, actorThreeResponseDto,
-                actorOneUpdateDto, updatedActorOneResponseDto
+        TestParamsInitUtil.initializeActorUpdateDto(
+                actorOneUpdateDto,
+                updatedActorOneResponseDto);
+        TestParamsInitUtil.initializeActorResponseDtos(
+                actorOneResponseDto,
+                actorTwoResponseDto,
+                actorThreeResponseDto,
+                actorFourResponseDto,
+                actorFiveResponseDto
         );
 
+        TestParamsInitUtil.initializeActorCreateDtos(
+                actorOneCreateDto,
+                actorTwoCreateDto,
+                actorThreeCreateDto,
+                actorFourCreateDto,
+                actorFiveCreateDto);
+
         List<ActorResponseDto> actorResponseDtoList = List.of(
-                actorOneResponseDto, actorTwoResponseDto, actorThreeResponseDto);
+                actorOneResponseDto,
+                actorTwoResponseDto,
+                actorThreeResponseDto,
+                actorFourResponseDto,
+                actorFiveResponseDto);
         final List<ActorResponseDto> actorResponseDtoByNameList = List.of(
                 actorOneResponseDto, actorThreeResponseDto);
 
-        List<Actor> actorsList = List.of(actorOne, actorTwo, actorThree);
+        List<Actor> actorsList = List.of(actorOne, actorTwo, actorThree, actorFour, actorFive);
         List<Actor> actorsByNameList = List.of(actorOne, actorThree);
         actorsPage = new PageImpl<>(actorsList, pageable, actorsList.size());
         actorsByNamePage = new PageImpl<>(actorsByNameList, pageable, actorsByNameList.size());
@@ -103,10 +135,10 @@ class ActorServiceImplTest {
     @DisplayName("Save new actor and return response dto")
     void saveActor_WithValidDto_ReturnResponseDto() {
         Mockito.when(actorMapper.toModel(actorOneCreateDto))
-                .thenReturn(actorOneWithoutId);
-        Mockito.when(actorRepository.save(actorOneWithoutId))
-                .thenReturn(actorOneWithoutId);
-        Mockito.when(actorMapper.toDto(actorOneWithoutId))
+                .thenReturn(actorOne);
+        Mockito.when(actorRepository.save(actorOne))
+                .thenReturn(actorOne);
+        Mockito.when(actorMapper.toDto(actorOne))
                 .thenReturn(actorOneResponseDto);
 
         ActorResponseDto actual = actorService.saveActor(actorOneCreateDto);
@@ -144,6 +176,9 @@ class ActorServiceImplTest {
         Mockito.when(actorMapper.toDto(actorOne)).thenReturn(actorOneResponseDto);
         Mockito.when(actorMapper.toDto(actorTwo)).thenReturn(actorTwoResponseDto);
         Mockito.when(actorMapper.toDto(actorThree)).thenReturn(actorThreeResponseDto);
+        Mockito.when(actorMapper.toDto(actorFour)).thenReturn(actorFourResponseDto);
+        Mockito.when(actorMapper.toDto(actorFive)).thenReturn(actorFiveResponseDto);
+
 
         Page<ActorResponseDto> actualPage = actorService.getAll(pageable);
         Page<ActorResponseDto> expectedPage = actorResponseDtoPage;

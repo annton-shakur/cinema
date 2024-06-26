@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layout}">
 
 <head>
@@ -20,6 +20,28 @@
             <div class="col-md-8">
                 <h1 th:text="${director.name}">Director Name</h1>
                 <p th:text="${director.description}"></p>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#editForm" aria-expanded="false" aria-controls="editForm" sec:authorize="hasRole('MODERATOR')">Edit</button>
+            </div>
+        </div>
+        <div class="collapse mt-4" id="editForm">
+            <div class="card card-body bg-light p-4">
+                <h2>Edit Director Details</h2>
+                <form th:action="@{/directors/{id}(id=${director.id})}" method="post" th:object="${director}" id="director-edit-form">
+                    <input type="hidden" name="_method" value="patch" />
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" th:text="*{description}"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="imageUrl" name="imageUrl" th:value="*{imageUrl}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
             </div>
         </div>
         <div class="row mt-4">

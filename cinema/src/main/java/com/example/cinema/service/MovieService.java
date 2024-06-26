@@ -2,8 +2,8 @@ package com.example.cinema.service;
 
 import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
-import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
+import com.example.cinema.dto.movie.SearchParams;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ public interface MovieService {
 
     void deleteById(final Long id);
 
-    Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
+    Page<MovieResponseDto> searchMovies(final SearchParams searchParams,
                                         final Pageable pageable);
 
     List<MovieResponseDto> findAllByActorId(final Long id);

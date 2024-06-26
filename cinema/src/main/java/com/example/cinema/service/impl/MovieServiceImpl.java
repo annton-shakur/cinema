@@ -6,6 +6,7 @@ import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
+import com.example.cinema.dto.movie.SearchParams;
 import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.MovieMapper;
 import com.example.cinema.model.Actor;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -98,9 +100,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public Page<MovieResponseDto> searchMovies(final MovieSearchParameters searchDto,
+    public Page<MovieResponseDto> searchMovies(final SearchParams searchParams,
                                                final Pageable pageable
     ) {
+        MovieSearchParameters searchDto = new MovieSearchParameters();
+        setSearchDto(searchDto, searchParams);
+
         Specification<Movie> specification = specificationBuilder.build(searchDto);
         Set<Long> actorIds;
         if (searchDto.getActors() != null) {
@@ -165,5 +170,51 @@ public class MovieServiceImpl implements MovieService {
                         .map(Category::new)
                         .collect(Collectors.toSet()))
         );
+    }
+
+    private void setSearchDto(MovieSearchParameters searchDto,
+                              final SearchParams searchParams) {
+        if (searchParams.getDirectorId() != null) {
+            String[] director = Stream.of(searchParams.getDirectorId())
+                    .mapToInt(Long::intValue)
+                    .mapToObj(String::valueOf)
+                    .toList()
+                    .toArray(String[]::new);
+            searchDto.setDirector(director);
+        }
+
+        if (searchParams.getRating() != null) {
+            String[] rating = Stream.of(searchParams.getRating())
+                    .map(String::valueOf)
+                    .toList()
+                    .toArray(String[]::new);
+            searchDto.setRating(rating);
+        }
+
+        if (searchParams.getYear() != null) {
+            String[] year = Stream.of(searchParams.getYear())
+                    .map(String::valueOf)
+                    .toList()
+                    .toArray(String[]::new);
+            searchDto.setYears(year);
+        }
+
+        if (searchParams.getCategoryIds() != null) {
+            String[] categories = searchParams.getCategoryIds().stream()
+                    .mapToInt(Long::intValue)
+                    .mapToObj(String::valueOf)
+                    .toList()
+                    .toArray(String[]::new);
+            searchDto.setCategories(categories);
+        }
+
+        if (searchParams.getActorIds() != null) {
+            String[] actors = searchParams.getActorIds().stream()
+                    .mapToInt(Long::intValue)
+                    .mapToObj(String::valueOf)
+                    .toList()
+                    .toArray(String[]::new);
+            searchDto.setActors(actors);
+        }
     }
 }

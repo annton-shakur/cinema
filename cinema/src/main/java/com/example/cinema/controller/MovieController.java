@@ -2,8 +2,8 @@ package com.example.cinema.controller;
 
 import com.example.cinema.dto.movie.MovieCreateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
-import com.example.cinema.dto.movie.MovieSearchParameters;
 import com.example.cinema.dto.movie.MovieUpdateDto;
+import com.example.cinema.dto.movie.SearchParams;
 import com.example.cinema.dto.rating.RatingCreateDto;
 import com.example.cinema.model.User;
 import com.example.cinema.service.MovieService;
@@ -66,10 +66,10 @@ public class MovieController {
     @GetMapping("/search")
     @Operation(summary = "Search movies by different params",
             description = "Search movies by dynamic params using criteria")
-    Page<MovieResponseDto> searchMovies(@RequestBody final MovieSearchParameters searchDto,
+    Page<MovieResponseDto> searchMovies(@RequestBody final SearchParams searchParams,
                                         final Pageable pageable
     ) {
-        return movieService.searchMovies(searchDto, pageable);
+        return movieService.searchMovies(searchParams, pageable);
     }
 
     @PreAuthorize("hasRole('MODERATOR')")

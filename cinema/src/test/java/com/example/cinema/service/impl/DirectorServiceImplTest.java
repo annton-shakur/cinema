@@ -7,7 +7,7 @@ import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.DirectorMapper;
 import com.example.cinema.model.Director;
 import com.example.cinema.repository.DirectorRepository;
-import com.example.cinema.uitl.TestParamsInitUtil;
+import com.example.cinema.util.TestParamsInitUtil;
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.core.Logger;
@@ -30,10 +30,13 @@ class DirectorServiceImplTest {
 
     private static Director directorTarantino;
     private static Director directorNolan;
-    private static Director directorTarantinoWithoutId;
+    private static Director directorSpielberg;
     private static DirectorCreateDto directorTarantinoCreateDto;
+    private static DirectorCreateDto directorNolanCreateDto;
+    private static DirectorCreateDto directorSpielbergCreateDto;
     private static DirectorResponseDto directorTarantinoResponseDto;
     private static DirectorResponseDto directorNolanResponseDto;
+    private static DirectorResponseDto directorSpielbergResponseDto;
     private static DirectorUpdateDto directorTarantinoUpdateDto;
     private static DirectorResponseDto updatedDirectorTarantinoResponseDto;
     private static Long validId;
@@ -63,18 +66,31 @@ class DirectorServiceImplTest {
 
         directorTarantino = new Director();
         directorNolan = new Director();
-        directorTarantinoWithoutId = new Director();
-        TestParamsInitUtil.initializeDirectorModels(directorTarantino,
-                directorNolan, directorTarantinoWithoutId);
+        directorSpielberg = new Director();
+        TestParamsInitUtil.initializeDirectors(directorTarantino,
+                directorNolan, directorSpielberg);
 
         directorTarantinoCreateDto = new DirectorCreateDto();
+        directorNolanCreateDto = new DirectorCreateDto();
+        directorSpielbergCreateDto = new DirectorCreateDto();
         directorTarantinoResponseDto = new DirectorResponseDto();
         directorNolanResponseDto = new DirectorResponseDto();
+        directorSpielbergResponseDto = new DirectorResponseDto();
         directorTarantinoUpdateDto = new DirectorUpdateDto();
         updatedDirectorTarantinoResponseDto = new DirectorResponseDto();
-        TestParamsInitUtil.initializeDirectorDtos(directorTarantinoCreateDto,
-                directorTarantinoResponseDto, directorNolanResponseDto,
-                directorTarantinoUpdateDto, updatedDirectorTarantinoResponseDto);
+        TestParamsInitUtil.initializeDirectorResponseDtos(
+                directorTarantinoResponseDto,
+                directorNolanResponseDto,
+                directorSpielbergResponseDto);
+
+        TestParamsInitUtil.initializeDirectorCreateDtos(
+                directorTarantinoCreateDto,
+                directorNolanCreateDto,
+                directorSpielbergCreateDto);
+
+        TestParamsInitUtil.initializeDirectorUpdateDtos(
+                directorTarantinoUpdateDto,
+                updatedDirectorTarantinoResponseDto);
 
         List<DirectorResponseDto> directorResponseDtoList = List.of(
                 directorTarantinoResponseDto, directorNolanResponseDto);
@@ -97,10 +113,10 @@ class DirectorServiceImplTest {
     @DisplayName("Save new director and return response dto")
     void saveDirector_WithValidDto_ReturnResponseDto() {
         Mockito.when(directorMapper.toModel(directorTarantinoCreateDto))
-                .thenReturn(directorTarantinoWithoutId);
-        Mockito.when(directorRepository.save(directorTarantinoWithoutId))
+                .thenReturn(directorSpielberg);
+        Mockito.when(directorRepository.save(directorSpielberg))
                 .thenReturn(directorTarantino);
-        Mockito.when(directorMapper.toDto(directorTarantinoWithoutId))
+        Mockito.when(directorMapper.toDto(directorSpielberg))
                 .thenReturn(directorTarantinoResponseDto);
 
         DirectorResponseDto actual = directorService.saveDirector(directorTarantinoCreateDto);

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/create-form.css}" rel="stylesheet">
+    <title>Create Director</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <section layout:fragment="body" class="py-5">
+        <div class="container">
+            <h2>Create Director</h2>
+            <form role="form" method="post" th:action="@{/directors/new}" th:object="${directorDto}">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="name"
+                            name="name"
+                            th:field="*{name}"
+                            placeholder="Enter director's name"
+                            required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            th:field="*{description}"
+                            placeholder="Enter a brief description of the director"
+                            rows="3"
+                            required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">Image URL:</label>
+                    <input
+                            type="url"
+                            class="form-control"
+                            id="imageUrl"
+                            name="imageUrl"
+                            th:field="*{imageUrl}"
+                            placeholder="https://example.com/director-image.jpg">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Director</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

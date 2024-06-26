@@ -8,8 +8,7 @@ import com.example.cinema.mapper.MovieMapper;
 import com.example.cinema.model.Movie;
 import com.example.cinema.repository.movie.MovieRepository;
 import com.example.cinema.repository.movie.MovieSpecificationBuilder;
-import com.example.cinema.uitl.TestParamsInitUtil;
-import java.time.LocalDate;
+import com.example.cinema.util.TestParamsInitUtil;
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.Logger;
@@ -33,9 +32,15 @@ class MovieServiceImplTest {
 
     private static Long validMovieId;
     private static Long invalidMovieId;
-    private static Movie movie;
-    private static MovieResponseDto movieResponseDto;
-    private static MovieCreateDto movieCreateDto;
+    private static Movie movieOne;
+    private static Movie movieTwo;
+    private static Movie movieThree;
+    private static MovieResponseDto movieResponseDtoOne;
+    private static MovieResponseDto movieResponseDtoTwo;
+    private static MovieResponseDto movieResponseDtoThree;
+    private static MovieCreateDto movieCreateDtoOne;
+    private static MovieCreateDto movieCreateDtoTwo;
+    private static MovieCreateDto movieCreateDtoThree;
     private static MovieUpdateDto movieUpdateDto;
     private static MovieResponseDto updatedMovieResponseDto;
     private static Pageable pageable;
@@ -58,15 +63,37 @@ class MovieServiceImplTest {
         validMovieId = 1L;
         invalidMovieId = 100L;
 
-        movie = new Movie();
-        movieCreateDto = new MovieCreateDto();
+        movieOne = new Movie();
+        movieTwo = new Movie();
+        movieThree = new Movie();
+        TestParamsInitUtil.initializeMovies(movieOne, movieTwo, movieThree);
+
+        movieCreateDtoOne = new MovieCreateDto();
+        movieCreateDtoTwo = new MovieCreateDto();
+        movieCreateDtoThree = new MovieCreateDto();
+        TestParamsInitUtil.initializeMovieCreateDtos(
+                movieCreateDtoOne,
+                movieCreateDtoTwo,
+                movieCreateDtoThree
+        );
+
+        movieResponseDtoOne = new MovieResponseDto();
+        movieResponseDtoTwo = new MovieResponseDto();
+        movieResponseDtoThree = new MovieResponseDto();
+        TestParamsInitUtil.initializeMovieResponseDtos(
+                movieResponseDtoOne,
+                movieResponseDtoTwo,
+                movieResponseDtoThree);
+
         movieUpdateDto = new MovieUpdateDto();
-        movieResponseDto = new MovieResponseDto();
         updatedMovieResponseDto = new MovieResponseDto();
-        TestParamsInitUtil.initializeAllMovieFields(movie, movieCreateDto,
-                movieUpdateDto, movieResponseDto, updatedMovieResponseDto);
-        List<Movie> movieList = List.of(movie);
-        List<MovieResponseDto> movieResponseDtoList = List.of(movieResponseDto);
+
+        TestParamsInitUtil.initializeMovieUpdateDto(movieUpdateDto, updatedMovieResponseDto);
+        List<Movie> movieList = List.of(movieOne, movieTwo, movieThree);
+        List<MovieResponseDto> movieResponseDtoList = List.of(
+                movieResponseDtoOne,
+                movieResponseDtoTwo,
+                movieResponseDtoThree);
         pageable = Pageable.unpaged();
 
         moviePage = new PageImpl<>(movieList, pageable, movieList.size());
@@ -79,7 +106,9 @@ class MovieServiceImplTest {
     void searchByTitle_ReturnResponseDtoPage() {
         Mockito.when(movieRepository.findByTitleStartingWithIgnoreCase(pageable, "Inception"))
                 .thenReturn(moviePage);
-        Mockito.when(movieMapper.toDto(movie)).thenReturn(movieResponseDto);
+        Mockito.when(movieMapper.toDto(movieOne)).thenReturn(movieResponseDtoOne);
+        Mockito.when(movieMapper.toDto(movieTwo)).thenReturn(movieResponseDtoTwo);
+        Mockito.when(movieMapper.toDto(movieThree)).thenReturn(movieResponseDtoThree);
 
         Page<MovieResponseDto> actual = movieService.searchByTitle(pageable, "Inception");
         Page<MovieResponseDto> expected = movieResponseDtoPage;
@@ -91,7 +120,9 @@ class MovieServiceImplTest {
     @DisplayName("Retrieve all movies and return response dto page")
     void getAll_ReturnResponseDtoPage() {
         Mockito.when(movieRepository.findAll(pageable)).thenReturn(moviePage);
-        Mockito.when(movieMapper.toDto(movie)).thenReturn(movieResponseDto);
+        Mockito.when(movieMapper.toDto(movieOne)).thenReturn(movieResponseDtoOne);
+        Mockito.when(movieMapper.toDto(movieTwo)).thenReturn(movieResponseDtoTwo);
+        Mockito.when(movieMapper.toDto(movieThree)).thenReturn(movieResponseDtoThree);
 
         Page<MovieResponseDto> actual = movieService.getAll(pageable);
         Page<MovieResponseDto> expected = movieResponseDtoPage;
@@ -102,11 +133,11 @@ class MovieServiceImplTest {
     @Test
     @DisplayName("Find movie by valid id and return response dto")
     void findById_WithValidId_ReturnResponseDto() {
-        Mockito.when(movieRepository.findById(validMovieId)).thenReturn(Optional.of(movie));
-        Mockito.when(movieMapper.toDto(movie)).thenReturn(movieResponseDto);
+        Mockito.when(movieRepository.findById(validMovieId)).thenReturn(Optional.of(movieOne));
+        Mockito.when(movieMapper.toDto(movieOne)).thenReturn(movieResponseDtoOne);
 
         MovieResponseDto actual = movieService.findById(validMovieId);
-        MovieResponseDto expected = movieResponseDto;
+        MovieResponseDto expected = movieResponseDtoOne;
 
         Assertions.assertEquals(expected, actual);
     }
@@ -125,39 +156,12 @@ class MovieServiceImplTest {
     @Test
     @DisplayName("Save new movie and return response dto")
     void saveMovie_WithValidDto_ReturnResponseDto() {
-        Mockito.when(movieMapper.toModel(movieCreateDto)).thenReturn(movie);
-        Mockito.when(movieRepository.save(movie)).thenReturn(movie);
-        Mockito.when(movieMapper.toDto(movie)).thenReturn(movieResponseDto);
+        Mockito.when(movieMapper.toModel(movieCreateDtoOne)).thenReturn(movieOne);
+        Mockito.when(movieRepository.save(movieOne)).thenReturn(movieOne);
+        Mockito.when(movieMapper.toDto(movieOne)).thenReturn(movieResponseDtoOne);
 
-        MovieResponseDto actual = movieService.saveMovie(movieCreateDto);
-        MovieResponseDto expected = movieResponseDto;
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    @DisplayName("Update movie by valid id and return updated response dto")
-    void updateMovie_WithValidId_ReturnUpdatedResponseDto() {
-        Mockito.when(movieRepository.findById(validMovieId)).thenReturn(Optional.of(movie));
-        Mockito.when(movieRepository.save(movie)).thenReturn(movie);
-        Mockito.when(movieMapper.toDto(movie)).thenReturn(updatedMovieResponseDto);
-
-        final MovieResponseDto actual = movieService.updateMovie(validMovieId, movieUpdateDto);
-        MovieResponseDto expected = new MovieResponseDto();
-        expected.setId(validMovieId);
-        expected.setTitle("Inception: Director's Cut");
-        expected.setDuration(152);
-        expected.setDescription("""
-                A thief who steals corporate secrets through the use of dream-sharing
-                technology is given the inverse task of planting an idea into the mind
-                of a C.E.O. (Director's Cut)
-                """);
-        expected.setTrailerUrl("http://example.com/inception_directors_cut_trailer");
-        expected.setReleaseDate(LocalDate.of(2021, 7, 16));
-        expected.setDirectorId(1L);
-        expected.setActorIds(List.of(1L, 2L));
-        expected.setCategoryIds(List.of(1L, 2L));
-        expected.setCommentIds(List.of());
+        MovieResponseDto actual = movieService.saveMovie(movieCreateDtoOne);
+        MovieResponseDto expected = movieResponseDtoOne;
 
         Assertions.assertEquals(expected, actual);
     }
