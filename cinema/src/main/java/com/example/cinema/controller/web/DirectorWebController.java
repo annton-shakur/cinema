@@ -1,6 +1,8 @@
 package com.example.cinema.controller.web;
 
+import com.example.cinema.dto.director.DirectorCreateDto;
 import com.example.cinema.dto.director.DirectorResponseDto;
+import com.example.cinema.dto.director.DirectorUpdateDto;
 import com.example.cinema.dto.movie.MovieResponseDto;
 import com.example.cinema.service.DirectorService;
 import com.example.cinema.service.MovieService;
@@ -11,7 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,5 +50,24 @@ public class DirectorWebController {
         model.addAttribute("director", director);
         model.addAttribute("movies", movies);
         return "director-details";
+    }
+
+    @GetMapping("/new")
+    public String showCreateActorForm(final Model model) {
+        model.addAttribute("directorDto", new DirectorCreateDto());
+        return "directors-create";
+    }
+
+    @PostMapping("/new")
+    public String createActor(@ModelAttribute final DirectorCreateDto directorCreateDto) {
+        directorService.saveDirector(directorCreateDto);
+        return "redirect:/directors";
+    }
+
+    @PatchMapping("/{id}")
+    public String updateActorById(@PathVariable final Long id,
+                                  @ModelAttribute final DirectorUpdateDto directorUpdateDto) {
+        directorService.updateDirector(id, directorUpdateDto);
+        return "redirect:/directors/" + id;
     }
 }

@@ -7,7 +7,7 @@ import com.example.cinema.exception.EntityNotFoundException;
 import com.example.cinema.mapper.CategoryMapper;
 import com.example.cinema.model.Category;
 import com.example.cinema.repository.CategoryRepository;
-import com.example.cinema.uitl.TestParamsInitUtil;
+import com.example.cinema.util.TestParamsInitUtil;
 import java.util.List;
 import java.util.Optional;
 import org.apache.logging.log4j.core.Logger;
@@ -32,6 +32,8 @@ class CategoryServiceImplTest {
     private static Category categoryThree;
     private static Category categoryOneWithoutId;
     private static CategoryCreateDto categoryOneCreateDto;
+    private static CategoryCreateDto categoryTwoCreateDto;
+    private static CategoryCreateDto categoryThreeCreateDto;
     private static CategoryResponseDto categoryOneResponseDto;
     private static CategoryResponseDto categoryTwoResponseDto;
     private static CategoryUpdateDto categoryOneUpdateDto;
@@ -68,22 +70,25 @@ class CategoryServiceImplTest {
         categoryTwo = new Category();
         categoryThree = new Category();
         categoryOneWithoutId = new Category();
-        TestParamsInitUtil.initializeCategoryModels(categoryOne, categoryTwo,
-                categoryThree, categoryOneWithoutId);
-
+        TestParamsInitUtil.initializeCategories(categoryOne, categoryTwo,
+                categoryThree);
         categoryOneCreateDto = new CategoryCreateDto();
+        categoryTwoCreateDto = new CategoryCreateDto();
+        categoryThreeCreateDto = new CategoryCreateDto();
         categoryOneResponseDto = new CategoryResponseDto();
         categoryTwoResponseDto = new CategoryResponseDto();
         categoryThreeResponseDto = new CategoryResponseDto();
         categoryOneUpdateDto = new CategoryUpdateDto();
         updatedCategoryOneResponseDto = new CategoryResponseDto();
-        TestParamsInitUtil.initializeCategoryDtos(categoryOneCreateDto,
+        TestParamsInitUtil.initializeCategoryCreateDtos(
+                categoryOneCreateDto,
+                categoryTwoCreateDto,
+                categoryThreeCreateDto);
+
+        TestParamsInitUtil.initializeCategoryResponseDtos(
                 categoryOneResponseDto,
                 categoryTwoResponseDto,
-                categoryThreeResponseDto,
-                categoryOneUpdateDto,
-                updatedCategoryOneResponseDto);
-
+                categoryThreeResponseDto);
         List<CategoryResponseDto> categoryResponseDtoList = List.of(
                 categoryOneResponseDto, categoryTwoResponseDto, categoryThreeResponseDto);
 
